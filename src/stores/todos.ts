@@ -13,6 +13,10 @@ export const useTodosStore = defineStore('todos', () => {
   // State: reactive array of todos
   const todos = ref<Todo[]>([])
   const nextId = ref(1)
+  
+  // Pagination state
+  const currentPage = ref(1)
+  const itemsPerPage = ref(10)
 
   // Action: Add new todo
   const addTodo = (text: string) => {
@@ -50,10 +54,48 @@ export const useTodosStore = defineStore('todos', () => {
     }
   }
 
+  // Action: Initialize with sample data
+  const initializeSampleData = () => {
+    if (todos.value.length === 0) {
+      const sampleTodos = Array.from({ length: 30 }, (_, i) => ({
+        id: nextId.value++,
+        text: `Sample todo item ${i + 1}`,
+        completed: Math.random() > 0.7,
+        createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000)
+      }))
+      todos.value.push(...sampleTodos)
+    }
+  }
+
+  // Pagination actions
+  const setPage = (page: number) => {
+    currentPage.value = page
+  }
+
+  const nextPage = () => {
+    if (currentPage.value < totalPages.value) {
+      currentPage.value++
+    }
+  }
+
+  const prevPage = () => {
+    if (currentPage.value > 1) {
+      currentPage.value--
+    }
+  }
+
   // Getters: Computed properties
   const completedTodos = computed(() => todos.value.filter(t => t.completed))
   const pendingTodos = computed(() => todos.value.filter(t => !t.completed))
   const totalTodos = computed(() => todos.value.length)
+  
+  // Pagination getters
+  const totalPages = computed(() => Math.ceil(todos.value.length / itemsPerPage.value))
+  const paginatedTodos = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage.value
+    const end = start + itemsPerPage.value
+    return todos.value.slice(start, end)
+  })
 
   return {
     todos,
@@ -63,6 +105,14 @@ export const useTodosStore = defineStore('todos', () => {
     deleteTodo,
     completedTodos,
     pendingTodos,
-    totalTodos
+    totalTodos,
+    initializeSampleData,
+    currentPage,
+    itemsPerPage,
+    totalPages,
+    paginatedTodos,
+    setPage,
+    nextPage,
+    prevPage
   }
 })

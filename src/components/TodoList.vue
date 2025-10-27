@@ -30,7 +30,7 @@
     <!-- Todo items list -->
     <div class="space-y-2">
       <div
-        v-for="todo in todosStore.todos"
+        v-for="todo in todosStore.paginatedTodos"
         :key="todo.id"
         class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50"
       >
@@ -84,6 +84,29 @@
       </div>
     </div>
 
+    <!-- Pagination -->
+    <div v-if="todosStore.totalPages > 1" class="flex justify-center items-center gap-2 mt-6">
+      <button
+        @click="todosStore.prevPage()"
+        :disabled="todosStore.currentPage === 1"
+        class="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Previous
+      </button>
+      
+      <span class="px-4 py-1 text-sm text-gray-600">
+        Page {{ todosStore.currentPage }} of {{ todosStore.totalPages }}
+      </span>
+      
+      <button
+        @click="todosStore.nextPage()"
+        :disabled="todosStore.currentPage === todosStore.totalPages"
+        class="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Next
+      </button>
+    </div>
+
     <!-- Empty state -->
     <div v-if="todosStore.todos.length === 0" class="text-center py-8 text-gray-500">
       No todos yet. Add one above to get started!
@@ -92,11 +115,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, onMounted } from 'vue'
 import { useTodosStore } from '../stores/todos'
 
 // Store instance
 const todosStore = useTodosStore()
+
+// Initialize sample data on component mount
+onMounted(() => {
+  todosStore.initializeSampleData()
+})
 
 // Form state
 const newTodoText = ref('')
