@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
-    <div class="max-w-4xl mx-auto px-4 text-center">
+    <div class="mx-auto px-4 text-center" style="max-width: 1000px;">
       <h1 class="text-4xl font-bold text-gray-900 mb-6">
         Welcome to Vue 3 + Vite
       </h1>

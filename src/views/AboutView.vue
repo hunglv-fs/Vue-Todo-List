@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-100 py-12">
-    <div class="max-w-3xl mx-auto px-4">
+    <div class="mx-auto px-4" style="max-width: 1000px;">
       <div class="bg-white rounded-lg shadow-lg p-8">
         <h1 class="text-3xl font-bold text-gray-900 mb-6">About This Project</h1>
         
