@@ -73,6 +73,14 @@ export const useTodosStore = defineStore('todos', () => {
     todos.value = todos.value.filter(todo => !todo.completed)
   }
 
+  // Action: Reorder todos (for drag and drop)
+  const reorderTodos = (fromIndex: number, toIndex: number) => {
+    const item = todos.value.splice(fromIndex, 1)[0]
+    if (item) {
+      todos.value.splice(toIndex, 0, item)
+    }
+  }
+
   // Action: Initialize with sample data
   const initializeSampleData = () => {
     if (todos.value.length === 0) {
@@ -125,6 +133,7 @@ export const useTodosStore = defineStore('todos', () => {
     selectAll,
     deselectAll,
     deleteSelected,
+    reorderTodos,
     completedTodos,
     pendingTodos,
     totalTodos,
