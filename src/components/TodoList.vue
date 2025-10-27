@@ -29,6 +29,16 @@
       </div>
       <div class="flex gap-2">
         <button
+          v-if="todosStore.completedTodos.length > 0"
+          @click="exportToCSV"
+          class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors flex items-center gap-1"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+          </svg>
+          Export CSV
+        </button>
+        <button
           @click="todosStore.selectAll()"
           class="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
         >
@@ -306,6 +316,32 @@ const selectTodo = (todoId: number) => {
 const deleteTodo = (todoId: number) => {
   todosStore.deleteTodo(todoId)
   activeMenuId.value = null
+}
+
+const exportToCSV = () => {
+  const selectedTodos = todosStore.completedTodos
+  if (selectedTodos.length === 0) return
+
+  const headers = ['ID', 'Text', 'Completed', 'Created At']
+  const csvContent = [
+    headers.join(','),
+    ...selectedTodos.map(todo => [
+      todo.id,
+      `"${todo.text.replace(/"/g, '""')}"`,
+      todo.completed,
+      todo.createdAt.toISOString()
+    ].join(','))
+  ].join('\n')
+
+  const blob = new Blob([csvContent], { type: 'text/csv' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `selected-todos-${new Date().toISOString().split('T')[0]}.csv`
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
 }
 
 const handleClickOutside = (event: Event) => {
