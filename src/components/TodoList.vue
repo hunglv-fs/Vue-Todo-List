@@ -51,7 +51,7 @@
             @keyup.enter="saveEdit(todo.id)"
             @keyup.escape="cancelEdit"
             class="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            ref="editInput"
+            :ref="el => editInput = el as HTMLInputElement"
           />
           <span
             v-else
@@ -104,7 +104,7 @@ const newTodoText = ref('')
 // Edit state
 const editingId = ref<number | null>(null)
 const editText = ref('')
-const editInput = ref<HTMLInputElement>()
+const editInput: HTMLInputElement | null = null
 
 // Add new todo
 const handleAddTodo = () => {
@@ -119,7 +119,7 @@ const startEdit = async (id: number, text: string) => {
   editingId.value = id
   editText.value = text
   await nextTick()
-  editInput.value?.focus()
+  editInput?.focus()
 }
 
 // Save edit
