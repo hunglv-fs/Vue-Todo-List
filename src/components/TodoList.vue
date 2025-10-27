@@ -20,11 +20,34 @@
       </div>
     </form>
 
-    <!-- Todo statistics -->
-    <div class="mb-4 text-sm text-gray-600">
-      Total: {{ todosStore.totalTodos }} | 
-      Pending: {{ todosStore.pendingTodos.length }} | 
-      Completed: {{ todosStore.completedTodos.length }}
+    <!-- Todo statistics and bulk actions -->
+    <div class="mb-4 flex justify-between items-center">
+      <div class="text-sm text-gray-600">
+        Total: {{ todosStore.totalTodos }} | 
+        Pending: {{ todosStore.pendingTodos.length }} | 
+        Completed: {{ todosStore.completedTodos.length }}
+      </div>
+      <div class="flex gap-2">
+        <button
+          @click="todosStore.selectAll()"
+          class="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+        >
+          Select All
+        </button>
+        <button
+          @click="todosStore.deselectAll()"
+          class="px-3 py-1 text-sm bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+        >
+          Deselect All
+        </button>
+        <button
+          @click="todosStore.deleteSelected()"
+          :disabled="todosStore.completedTodos.length === 0"
+          class="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Delete Selected
+        </button>
+      </div>
     </div>
 
     <!-- Todo items list -->

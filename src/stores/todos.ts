@@ -54,6 +54,25 @@ export const useTodosStore = defineStore('todos', () => {
     }
   }
 
+  // Action: Select all todos
+  const selectAll = () => {
+    todos.value.forEach(todo => {
+      todo.completed = true
+    })
+  }
+
+  // Action: Deselect all todos
+  const deselectAll = () => {
+    todos.value.forEach(todo => {
+      todo.completed = false
+    })
+  }
+
+  // Action: Delete selected todos
+  const deleteSelected = () => {
+    todos.value = todos.value.filter(todo => !todo.completed)
+  }
+
   // Action: Initialize with sample data
   const initializeSampleData = () => {
     if (todos.value.length === 0) {
@@ -103,6 +122,9 @@ export const useTodosStore = defineStore('todos', () => {
     toggleTodo,
     updateTodo,
     deleteTodo,
+    selectAll,
+    deselectAll,
+    deleteSelected,
     completedTodos,
     pendingTodos,
     totalTodos,
