@@ -70,4 +70,50 @@ describe('Todos Store', () => {
     store.prevPage()
     expect(store.currentPage).toBe(1)
   })
+
+  it('selects all todos', () => {
+    const store = useTodosStore()
+    store.addTodo('Todo 1')
+    store.addTodo('Todo 2')
+    store.addTodo('Todo 3')
+    
+    store.selectAll()
+    
+    expect(store.completedTodos).toHaveLength(3)
+    expect(store.pendingTodos).toHaveLength(0)
+    store.todos.forEach(todo => {
+      expect(todo.completed).toBe(true)
+    })
+  })
+
+  it('deselects all todos', () => {
+    const store = useTodosStore()
+    store.addTodo('Todo 1')
+    store.addTodo('Todo 2')
+    store.toggleTodo(store.todos[0]!.id)
+    store.toggleTodo(store.todos[1]!.id)
+    
+    store.deselectAll()
+    
+    expect(store.completedTodos).toHaveLength(0)
+    expect(store.pendingTodos).toHaveLength(2)
+    store.todos.forEach(todo => {
+      expect(todo.completed).toBe(false)
+    })
+  })
+
+  it('deletes selected todos', () => {
+    const store = useTodosStore()
+    store.addTodo('Todo 1')
+    store.addTodo('Todo 2')
+    store.addTodo('Todo 3')
+    store.toggleTodo(store.todos[0]!.id)
+    store.toggleTodo(store.todos[2]!.id)
+    
+    store.deleteSelected()
+    
+    expect(store.todos).toHaveLength(1)
+    expect(store.todos[0]!.text).toBe('Todo 2')
+    expect(store.completedTodos).toHaveLength(0)
+  })
 })
