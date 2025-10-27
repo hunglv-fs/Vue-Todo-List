@@ -31,6 +31,7 @@
         <button
           v-if="todosStore.completedTodos.length > 0"
           @click="exportToCSV"
+          data-testid="export-csv"
           class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors flex items-center gap-1"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
