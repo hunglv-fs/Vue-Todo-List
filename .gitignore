@@ -32,3 +32,5 @@ Thumbs.db
 *.bak
 *.tmp
 .eslintcache
+playwright-report
+test-results/
